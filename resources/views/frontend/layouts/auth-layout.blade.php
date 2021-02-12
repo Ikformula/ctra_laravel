@@ -18,6 +18,17 @@
     <link id="skin-theme" rel="stylesheet" href="{{ asset('dashlite/assets/css/skins/theme-blue.css?ver=1.8.0') }}">
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('js/toastr/toastr.min.css')}}">
+    <style>
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            .print-only {
+                display: block;
+            }
+        }
+    </style>
     @stack('after-styles')
 </head>
 

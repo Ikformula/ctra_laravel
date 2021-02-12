@@ -7,7 +7,7 @@
                 <em class="icon ni ni-cross"></em>
             </button>
             <div class="modal-header">
-                <h5 class="modal-title">Capture Driver's Photograph</h5>
+                <h5 class="modal-title">Capture <span class="entity-name"></span>'s Photograph</h5>
             </div>
             <div class="modal-body">
                 <div class="row gy-3 justify-content-center">
@@ -37,6 +37,21 @@
 <script type="text/javascript" src="{{ asset('js/webcamjs/webcam.min.js') }}"></script>
 
 <script>
+    var owner = ['Owner', '#owner_photo_modal_button', 'passport'];
+    var driver = ['Driver', '#driver_photo_modal_button', 'driver_photograph'];
+    var entity = owner;
+
+    function setEntity($data){
+        if($data === 'owner'){
+            entity = owner;
+        }else{
+            entity = driver;
+        }
+
+        $('.entity-name').html(entity[0]);
+        return console.log(entity);
+    }
+
     // Configure a few settings and attach camera
     Webcam.set({
         width: 320,
@@ -58,9 +73,9 @@
         // take snapshot and get image data
         Webcam.snap( function(data_uri) {
             // console.log(data_uri);
-            var storer = document.getElementById('driver_photograph');
+            var storer = document.getElementById(entity[2]);
             storer.innerText = data_uri;
-            $('#driver_photo_modal_button').html('Driver\'s Photo captured');
+            $(entity[1]).html(entity[0] + '\'s Photo captured');
             // display results in page
             document.getElementById('results').innerHTML =
                 '<img src="'+data_uri+'" class="img-fluid"/>';

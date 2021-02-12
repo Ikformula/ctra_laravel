@@ -7,6 +7,7 @@
     <meta name="author" content="Bartholomew Asuquo, asuquobartholomewi@gmail.com, +2348184496562">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="{{ asset('dashlite/images/favicon.png') }}">
     <!-- Page Title  -->
@@ -21,7 +22,7 @@
     @stack('after-styles')
 </head>
 
-<body class="nk-body npc-invest bg-lighter ">
+<body class="nk-body npc-invest bg-lighter" style="/*font-size: 2.3ch */">
 <div class="nk-app-root">
     <!-- wrap @s -->
     <div class="nk-wrap ">

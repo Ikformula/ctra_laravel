@@ -17,8 +17,19 @@ class LicenseRegController extends Controller
         return view('frontend.license.registration');
     }
 
+    public function regNumExists(Request $request)
+    {
+        $count = 0;
+        $count = Vehicle::where('reg_num', $request->reg_num)->count();
+        return response()->json(['count' => $count], 200);
+    }
+
     public function storeReg(Request $request)
     {
+//        echo '<img src="'.$request->passport.'" width="100"><br>';
+//        echo '<img src="'.$request->driver_photograph.'" width="100">';
+//        die();
+
         // vehicle particulars
         $vehicle = new Vehicle();
         $vehicle->reg_num = $request->reg_num;
@@ -82,17 +93,7 @@ class LicenseRegController extends Controller
         $owner->relationship = $request->relationship;  // relationship with NOK
         $owner->nok_phone = $request->nok_phone;
 
-        if ($request->hasFile('passport')) {
-            $file = $request->file('passport');
-            $name = substr($request->first_name, 0, 3) . '_' . substr($request->last_name, 0, 3) . '_' . time() . '_' . rand(100, 999) . '_' . $vehicle->form_num . '.' . $file->getClientOriginalExtension();
-
-            $target_path = public_path('/license_reg_files/owners_passports/');
-
-            if ($file->move($target_path, $name)) {
-                // save file name in the database
-                $owner->passport = $name;
-            }
-        }
+        $owner->passport = $request->passport;
 
         if(!$owner->save()){
             $vehicle->destroyRecord();
@@ -124,16 +125,6 @@ class LicenseRegController extends Controller
         $driver->nok = $request->driver_nok;
         $driver->relationship = $request->driver_relationship;  // relationship with NOK
         $driver->nok_phone = $request->driver_nok_phone;
-
-//        if ($request->hasFile('driver_photograph')) {
-//            $file = $request->file('driver_photograph');
-//            $name = substr($request->driver_first_name, 0, 3) . '_' . substr($request->driver_last_name, 0, 3) . '_' . $vehicle->reg_year . '_' . $vehicle->reg_month . '_' . rand(100, 999) . '_' . $vehicle->reg_num . '.' . $file->getClientOriginalExtension();
-//
-//            $target_path = public_path('/license_reg_files/driver_photos/');
-//            if ($file->move($target_path, $name)) {
-//                $driver->photograph = $name;
-//            }
-//        }
 
         $driver->photograph = $request->driver_photograph;
 
@@ -188,6 +179,23 @@ class LicenseRegController extends Controller
             }
         }
 
+        if ($request->hasFile('guarantor_identification')) {
+            // thumbprint
+            $file = $request->file('guarantor_identification');
+            $name = substr($request->guarantor_first_name, 0, 3) . '_' .
+                    substr($request->guarantor_last_name, 0, 3) . '_' .
+                    $vehicle->reg_year . '_' . $vehicle->reg_month . '_' .
+                    rand(100, 999) .
+                    '_guarantor_identification_' .
+                    $vehicle->reg_num . '.' .
+                    $file->getClientOriginalExtension();
+
+            $target_path = public_path('/license_reg_files/guarantor_identifications/');
+            if ($file->move($target_path, $name)) {
+                $guarantor->guarantor_identification = $name;
+            }
+        }
+
         if(!$guarantor->save()){
             $vehicle->destroyRecord();
             return redirect()->back()->withInput()->withErrors('Unable to save data. Please confirm select and file upload fields and try again');
@@ -217,13 +225,14 @@ class LicenseRegController extends Controller
         $count = Vehicle::where('reg_num', $request->reg_num)->count();
         if($count){
             $vehicle = Vehicle::where('reg_num', $request->reg_num)->first();
-            return view('frontend.license.print')->with([
+            return view('frontend.license.reg-print')->with([
                 'vehicle' => $vehicle
             ]);
         }
 
         return redirect()->back()->withErrors('Invalid Registration Number');
     }
+
 
 
 }

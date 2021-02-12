@@ -20,9 +20,15 @@
                     <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
                     <div class="toggle-expand-content" data-content="pageMenu">
                         <ul class="nk-block-tools g-3">
-                            <li><a href="{{ route('frontend.print.reg').'?reg_num='.$vehicle->reg_num }}" class="btn btn-white btn-dim btn-outline-primary" target="_blank"><em class="icon ni ni-printer-fill"></em><span>Print License</span></a></li>
+                            <li><a href="{{ route('frontend.print.reg').'?reg_num='.$vehicle->reg_num }}" class="btn btn-white btn-dim btn-outline-primary" target="_blank"><em class="icon ni ni-printer-fill"></em><span>Print Registration License</span></a></li>
+                    @if(!is_null($vehicle->ren_year))
+                            <li><a href="{{ route('frontend.print.ren').'?reg_num='.$vehicle->reg_num }}" class="btn btn-white btn-dim btn-outline-secondary" target="_blank"><em class="icon ni ni-printer-fill"></em><span>Print Renewal License</span></a></li>
+                            @else
+                                <li><a class="btn btn-white btn-dim btn-outline-secondary disabled" ><em class="icon ni ni-printer-fill"></em><span>Print Renewal License</span></a></li>
+                            @endif
 
                             <li><a href="{{ route('frontend.licence.reg.form') }}" title="New Registration" class="btn btn-white btn-dim btn-outline-primary"><em class="icon ni ni-plus"></em></a></li>
+                            <li>@include('includes.partials.record-delete-form')</li>
 
                         </ul>
                     </div>
@@ -40,17 +46,12 @@
                 <div class="row gy-4">
                     <div class="col-md-3">
                         <div class="card card-bordered">
-                            <img src="{{ asset('license_reg_files/owners_passports/'.$vehicle->owner()->passport) }}" class="card-img-top" alt="">
+                            <img src="{{ $vehicle->owner()->passport }}" class="card-img-top" alt="">
                             <div class="card-inner">
                                 <h5 class="card-title">Owner's Passport</h5>
                                 <div class="form-group">
-                                    <label class="form-label" for="">Upload</label>
-                                    <div class="form-control-wrap">
-                                        <div class="custom-file">
-                                            <input type="file" multiple class="custom-file-input" id="" name="photo">
-                                            <label class="custom-file-label" for="">Choose file</label>
-                                        </div>
-                                    </div>
+                                    <textarea id="passport" name="passport" style="display: none">{{ $vehicle->owner()->passport }}</textarea>
+                                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" onclick="setEntity('owner')" id="owner_photo_modal_button">Capture Owner's Photo</button>
                                 </div>
                             </div>
                         </div>
@@ -312,10 +313,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="">Upload</label>
                                         <div class="form-control-wrap">
-                                            <div class="custom-file">
-                                                <input type="file" multiple class="custom-file-input" id="" name="">
-                                                <label class="custom-file-label" for="">Choose file</label>
-                                            </div>
+                                            <input type="file" accept="image/*" class="form-control" id="photo" name="vehicle_photo">
                                         </div>
                                     </div>
                                 </div>
@@ -442,17 +440,8 @@
                                 <img src="{{ $vehicle->driver()->photograph }}" class="card-img-top" alt="">
                                 <div class="card-inner">
                                     <h5 class="card-title">Driver's Photograph</h5>
-{{--                                    <div class="form-group">--}}
-{{--                                        <label class="form-label" for="">Upload</label>--}}
-{{--                                        <div class="form-control-wrap">--}}
-{{--                                            <div class="custom-file">--}}
-{{--                                                <input type="file" multiple class="custom-file-input" id="driver_photograph" name="driver_photograph">--}}
-{{--                                                <label class="custom-file-label" for="">Choose file</label>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-                                    <textarea id="driver_photograph" name="driver_photograph" style="display: none"></textarea>
-                                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" id="driver_photo_modal_button">Capture Driver's Photo</button>
+                                    <textarea id="driver_photograph" name="driver_photograph" style="display: none;">{{ $vehicle->driver()->photograph }}</textarea>
+                                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" onclick="setEntity('driver')" id="driver_photo_modal_button">Capture Driver's Photo</button>
                                 </div>
                             </div>
 
@@ -464,7 +453,7 @@
                                         <label class="form-label" for="">Upload</label>
                                         <div class="form-control-wrap">
                                             <div class="custom-file">
-                                                <input type="file" multiple class="custom-file-input" id="thumbprint" name="thumbprint">
+                                                <input type="file" accept="image/*" multiple class="custom-file-input" id="thumbprint" name="thumbprint">
                                                 <label class="custom-file-label" for="">Choose file</label>
                                             </div>
                                         </div>
@@ -744,6 +733,22 @@
                                         <div class="form-control-wrap">
                                             <div class="custom-file">
                                                 <input type="file" multiple class="custom-file-input" id="guarantor_passport" name="guarantor_passport">
+                                                <label class="custom-file-label" for="">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card card-bordered">
+                                <img src="{{ asset('license_reg_files/guarantor_identifications/'.$vehicle->guarantor()->guarantor_identification) }}" class="card-img-top" alt="">
+                                <div class="card-inner">
+                                    <h5 class="card-title">Guarantor's Identification</h5>
+                                    <div class="form-group">
+                                        <label class="form-label" for="guarantor_identification">Upload</label>
+                                        <div class="form-control-wrap">
+                                            <div class="custom-file">
+                                                <input type="file" multiple class="custom-file-input" id="guarantor_identification" name="guarantor_identification">
                                                 <label class="custom-file-label" for="">Choose file</label>
                                             </div>
                                         </div>

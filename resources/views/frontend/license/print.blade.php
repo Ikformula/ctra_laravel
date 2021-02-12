@@ -1,11 +1,11 @@
 @extends('frontend.layouts.auth-layout')
 
-@section('title', $vehicle->form_num.\Carbon\Carbon::now()->toDateTimeString() )
+@section('title', 'Renewal Printout '.$vehicle->form_num.\Carbon\Carbon::now()->toDateTimeString() )
 
 @section('content')
     <div class="container-xl wide-xl">
         <div class="nk-content-inner">
-            <div class="nk-content-body p-2">
+            <div class="nk-content-body p-2" style="font-size: {{ $_ENV['PRINT_ZOOM'] }}ch">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <img src="{{ asset('img/Coat_of_arms_of_Nigeria.png') }}" width="100">
 
@@ -40,7 +40,7 @@
 
                                     <tr>
                                         <td>Name</td>
-                                        <td><strong>{{ $vehicle->owner()->first_name }} {{ $vehicle->owner()->last_name }}</strong></td>
+                                        <td><strong>{{ $vehicle->owner()->first_name }} {{ $vehicle->owner()->mid_name }}  {{ $vehicle->owner()->last_name }}</strong></td>
                                     </tr>
 
                                     <tr>
@@ -115,7 +115,7 @@
                                     <tbody>
                                     <tr>
                                         <td>Name</td>
-                                        <td><strong>{{ $vehicle->driver()->first_name }} {{ $vehicle->driver()->last_name }} </strong></td>
+                                        <td><strong>{{ $vehicle->driver()->first_name }} {{ $vehicle->driver()->last_name }}  {{ $vehicle->driver()->mid_name }} </strong></td>
                                     </tr>
 
                                     <tr>
@@ -143,7 +143,7 @@
                                     <tbody>
                                     <tr>
                                         <td>Name</td>
-                                        <td><strong>{{ $vehicle->guarantor()->first_name }} {{ $vehicle->guarantor()->last_name }}</strong></td>
+                                        <td><strong>{{ $vehicle->guarantor()->first_name }} {{ $vehicle->guarantor()->last_name }} {{ $vehicle->guarantor()->mid_name }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>Office Address</td>
@@ -169,13 +169,13 @@
                                     <div class="card-body p-1">
                                         <strong>Owner's Passport</strong>
                                     </div>
-                                    <img src="{{ asset('license_reg_files/owners_passports/'.$vehicle->owner()->passport) }}" class="card-img-bottom" alt="">
+                                    <img src="{{ $vehicle->owner()->passport }}" class="card-img-bottom" alt="">
                                 </div>
                                 <div class="card card-bordered">
                                     <div class="card-body p-1">
                                         <strong>Guarantor's Passport</strong>
                                     </div>
-                                    <img src="{{ asset('license_reg_files/owners_passports/'.$vehicle->owner()->passport) }}" class="card-img-bottom" alt="">
+                                    <img src="{{ asset('license_reg_files/guarantor_photos/'.$vehicle->guarantor()->guarantor_id_photo) }}" class="card-img-bottom" alt="">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -194,6 +194,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row my-3">
+                            <div class="col-md-12">
+                        <div class="card card-bordered">
+                            <div class="card-body p-1">
+                                <strong>Guarantor's Identification</strong>
+                            </div>
+                            <img src="{{ asset('license_reg_files/guarantor_identifications/'.$vehicle->guarantor()->guarantor_identification) }}" class="card-img-bottom" style="max-height: 300px" alt="">
+                        </div>
+                            </div>
+                        </div>
+
 
                         <div class="row">
                             <div class="col-md-12">
@@ -237,7 +249,8 @@
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-12">
-                                        ______________________________________________
+                                            <br class="print-only">
+                                        ___________________________________
                                         </div>
                                     </div>
                                     <div class="row">

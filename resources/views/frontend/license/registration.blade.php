@@ -27,7 +27,32 @@
                     <h5>Step 1 - Owner's Biodata</h5>
                 </div>
                 <div class="nk-wizard-content">
-                    <span class="preview-title-lg overline-title">Owner Biodata</span>
+                    <div class="row mb-5">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label" for="reg_num">Registration Number</label>
+                            <div class="form-control-wrap">
+                                <input value="{{ old('reg_num') }}" type="text" class="form-control" id="reg_num" name="reg_num" required>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Check Uniqueness of Reg. Number</label>
+                            <button class="btn btn-primary btn-dim" onclick="checkReg()" type="button">Check</button>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-dismissible alert-warning" id="reg_alert_warning" style="display: none">
+                                <h4 class="alert-heading">Notice</h4>
+                                <p class="mb-0">This registration number already exists in this system's database</p>
+                            </div>
+                            <div class="alert alert-dismissible alert-success" id="reg_alert_success" style="display: none">
+                                <h4 class="alert-heading">Notice</h4>
+                                <p class="mb-0">This registration number is unique in this system's database</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="preview-title-lg overline-title">Owner Bio-data</span>
                     <div class="row gy-3">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -229,14 +254,13 @@
                             </div>
                         </div><!-- .col -->
 
+
                         <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label" for="passport">Owner's Passport</label>
-                                <div class="form-control-wrap">
-                                    <input type="file" required accept="image/*" class="form-control" id="passport" name="passport">
-                                </div>
-                            </div>
+                            <label class="form-label" for="passport">Owner's Photograph</label>
+                            <textarea id="passport" name="passport" style="display: none"></textarea>
+                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" onclick="setEntity('owner')" id="owner_photo_modal_button">Capture Owner's Photo</button>
                         </div>
+
 
                     </div>
                 </div>
@@ -250,7 +274,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="nok">Next of Kin Name</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="nok" name="nok">
+                                    <input value="{{ old('nok') }}" type="text" class="form-control" id="nok" name="nok">
                                 </div>
                             </div>
                         </div>
@@ -259,7 +283,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="relationship">NOK Relationship</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="relationship" name="relationship">
+                                    <input value="{{ old('relationship') }}" type="text" class="form-control" id="relationship" name="relationship">
                                 </div>
                             </div>
                         </div>
@@ -268,7 +292,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="nok_phone">NOK Phone Number</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="nok_phone" name="nok_phone">
+                                    <input value="{{ old('nok_phone') }}" type="text" class="form-control" id="nok_phone" name="nok_phone">
                                 </div>
                             </div>
                         </div>
@@ -278,20 +302,13 @@
                     <span class="preview-title-lg overline-title mt-3">Vehicle Particulars</span>
                     <div class="row gy-2">
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="form-label" for="reg_num">Registration Number</label>
-                                <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="reg_num" name="reg_num">
-                                </div>
-                            </div>
-                        </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="form-label" for="type">Type</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="type" name="type">
+                                    <input value="{{ old('type') }}" type="text" class="form-control" id="type" name="type">
                                 </div>
                             </div>
                         </div>
@@ -300,7 +317,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="license_number">License Number</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="license_number" name="license_number">
+                                    <input value="{{ old('license_number') }}" type="text" class="form-control" id="license_number" name="license_number">
                                 </div>
                             </div>
                         </div>
@@ -309,7 +326,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="colour">Colour</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="colour" name="colour">
+                                    <input value="{{ old('colour') }}" type="text" class="form-control" id="colour" name="colour">
                                 </div>
                             </div>
                         </div>
@@ -318,7 +335,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="chassis_number">Chassis Number</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="chassis_number" name="chassis_number">
+                                    <input value="{{ old('chassis_number') }}" type="text" class="form-control" id="chassis_number" name="chassis_number">
                                 </div>
                             </div>
                         </div>
@@ -327,7 +344,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="engine_number">Engine Number</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="engine_number" name="engine_number">
+                                    <input value="{{ old('engine_number') }}" type="text" class="form-control" id="engine_number" name="engine_number">
                                 </div>
                             </div>
                         </div>
@@ -336,7 +353,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="insurance">Insurance Number</label>
                                 <div class="form-control-wrap">
-                                    <input value="{{ old('') }}" type="text" class="form-control" id="insurance" name="insurance">
+                                    <input value="{{ old('insurance') }}" type="text" class="form-control" id="insurance" name="insurance">
                                 </div>
                             </div>
                         </div>
@@ -474,7 +491,7 @@
 {{--                                </div>--}}
 {{--                            </div>--}}
                             <textarea id="driver_photograph" name="driver_photograph" style="display: none"></textarea>
-                            <button value="{{ old('') }}" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" id="driver_photo_modal_button">Capture Driver's Photo</button>
+                            <button value="{{ old('') }}" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#camera-modal" onclick="setEntity('driver')" id="driver_photo_modal_button">Capture Driver's Photo</button>
                         </div>
 
                         <div class="col-md-8">
@@ -800,6 +817,15 @@
                             </div>
                         </div>
 
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label" for="guarantor_identification">Guarantor's Identification</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" required accept="image/*" class="form-control" id="guarantor_identification" name="guarantor_identification">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="row mt-5 mb-5">
@@ -816,6 +842,41 @@
 @endsection
 
 @push('after-scripts')
+    <script>
+        function checkReg(){
+            $('.alert-dismissible').fadeOut();
+            let token = '{{ csrf_token() }}';//Select input values with the data you want to send
+            let reg_num = $('#reg_num').val();
+            let url = 'reg-num-exists';
 
+            fetch(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": token
+                },
+                method: 'post',
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    reg_num: reg_num,
+                    _token: token
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if(data.count != 0){
+                        $('#reg_alert_warning').fadeIn();
+                    }else{
+                        $('#reg_alert_success').fadeIn();
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+
+    </script>
     @include('frontend.includes.webcam')
 @endpush

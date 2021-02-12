@@ -15,6 +15,7 @@ use App\Http\Controllers\LicenseRenewalController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact/send', [ContactController::class, 'send'])->name('contact.send');
+Route::get('print-ren', [LicenseRenewalController::class, 'printRenewal'])->name('print.ren');
 Route::get('print-reg', [LicenseRegController::class, 'printRegistration'])->name('print.reg');
 /*
  * These frontend controllers require the user to be logged in
@@ -35,6 +36,7 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
 
     Route::get('licence/register', [LicenseRegController::class, 'regForm'])->name('licence.reg.form');
     Route::post('licence/register', [LicenseRegController::class, 'storeReg'])->name('licence.reg.store');
+    Route::post('reg-num-exists', [LicenseRegController::class, 'regNumExists'])->name('licence.reg.num.check');
 
     Route::post('licence/renew', [LicenseRenewalController::class, 'renew'])->name('licence.renew.store');
 
@@ -42,4 +44,5 @@ Route::group(['middleware' => ['auth', 'password_expires']], function () {
     Route::get('registrations', [LicenseRenewalController::class, 'regList'])->name('reg.list');
 
     Route::post('get-for-date', [LicenseRenewalController::class, 'getForDate'])->name('get.for.date');
+    Route::post('delete-record', [LicenseRenewalController::class, 'deleteRegRecord'])->name('delete.record');
 });
